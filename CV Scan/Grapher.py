@@ -6,14 +6,14 @@ voltages = '0,1,2,3,'.split(',')
 
 
 
-
+i = 0
 import matplotlib.pyplot as plt
 import datetime
 import csv
 inp = [] 
 with open(csvPath) as file:
-	for i in file:
-		inp.append(i)
+        for i in file:
+                inp.append(i)
 #print(len(inp))
 
 
@@ -55,7 +55,7 @@ for i, q in enumerate(inp):
 
 fullData = [PC1, PC2, PC3, PC4, PC5, PC6, PC7]
 for q,i in enumerate(fullData):
-        print("PC{0}".format(q))
+        print("PC{0}".format(q))datetime.datetime.today()
         print(i)
 
 
@@ -117,35 +117,44 @@ allDataByVolt = [pc1ByVolt, pc2ByVolt, pc3ByVolt, pc4ByVolt, pc5ByVolt, pc6ByVol
 #for debug in allDataByVolt:
 #        print(debug)
 
-try:
-        allData = []
-        for pc in allDataByVolt:
-                newPC = []
-                for volt in pc:
-                        newPC.append(sum(volt)/len(volt))
-                allData.append(newPC)
+allData = []
+for pc in allDataByVolt:
+        newPC = []
+        for volt in pc:
+                newPC.append(sum(volt)/len(volt))
+        allData.append(newPC)
 
 
-        print(allData)
-        print(allData[0])
-        with open(os.path.expanduser('~') + "/Desktop/CVOutput.csv", 'w') as csvOut:
-                writer = csv.writer(csvOut, delimiter = ',')
-                writer.writerow(["Measurement Time", "Voltage", "PC1", "PC2", "PC3", "PC4", "PC5", "PC6", "PC7"])
-                for i, time in enumerate(timeM):
-                        print(i)
-                        writer.writerow([time, voltages[i], allData[0][i], allData[1][i], allData[2][i], allData[3][i], allData[4][i], allData[5][i], allData[6][i]])
 
-        for pc, i in enumerate(allData):
-                plt.figure(pc+1)
-                plt.plot(voltages, i)
-                plt.xlabel("Voltage (V)")
-                plt.ylabel("Capacitance (fF)")
-                plt.title("PC{0}".format(pc+1))
-                plt.grid(True)
-        plt.show(block=True)
 
-except ZeroDivisionError:
-        print("FATAL!!! No data found with given BLE Serial No.")
+
+print(allData)
+print(allData[0])
+
+
+
+
+
+
+
+
+with open(os.path.expanduser('~') + "/Desktop/CVOutput" + datetime.datetime.now().strftime('%I%M%S') + '.csv', 'w', newline='') as csvOut:
+        writer = csv.writer(csvOut)
+        writer.writerow(["Measurement Time", "Voltage", "PC1", "PC2", "PC3", "PC4", "PC5", "PC6", "PC7"])
+        for i, time in enumerate(timeM):
+                print(i)
+                writer.writerow([time, voltages[i], allData[0][i], allData[1][i], allData[2][i], allData[3][i], allData[4][i], allData[5][i], allData[6][i]])
+
+for pc, i in enumerate(allData):
+        plt.figure(pc+1)
+        plt.plot(voltages, i)
+        plt.xlabel("Voltage (V)")
+        plt.ylabel("Capacitance (fF)")
+        plt.title("PC{0}".format(pc+1))
+        plt.grid(True)
+plt.show(block=True)
+
+
 
 
 
